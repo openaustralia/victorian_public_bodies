@@ -23,13 +23,15 @@ def save_agency(page)
 end
 
 agent = Mechanize.new
-
 base_url = "https://online.foi.vic.gov.au"
-index_url = "/CA256BE9002028C5/AgencyLetter?ReadForm&1=20-Find+an+agency~&2=05-Browse+by+agency+name~&3=~&Letter=A~"
-page = agent.get(base_url + index_url)
 
-page.search('a.agency').each do |link|
-  agency_page = agent.get(base_url + link.attr(:href))
-  puts "Saving #{link.inner_text}: #{agency_page.uri.to_s}"
-  save_agency(agency_page)
+('A'...'Z').each do |letter|
+  index_url = "/CA256BE9002028C5/AgencyLetter?ReadForm&1=20-Find+an+agency~&2=05-Browse+by+agency+name~&3=~&Letter=#{letter}~"
+  page = agent.get(base_url + index_url)
+
+  page.search('a.agency').each do |link|
+    agency_page = agent.get(base_url + link.attr(:href))
+    puts "Saving #{link.inner_text}:\n#{agency_page.uri.to_s}"
+    save_agency(agency_page)
+  end
 end
