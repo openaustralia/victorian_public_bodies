@@ -6,6 +6,8 @@ def save_agency(page)
   table = page.at('div.DOCbody').at(:table)
   agency_values = table.search('td.AgencyValue').map { |td| td.inner_text }
 
+  website = table.search(:a)[1] ? table.search(:a)[1].attr(:href) : nil
+
   record = {
     id:             page.uri.to_s[/\=(\d+)~$/, 1],
     name:           page.at(:h2).inner_text,
@@ -14,7 +16,7 @@ def save_agency(page)
     telephone:      agency_values[2],
     fax:            agency_values[3],
     email:          agency_values[4],
-    website:        table.search(:a)[1].attr(:href)
+    website:        website
   }
 
   ScraperWiki.save_sqlite([:id], record)
