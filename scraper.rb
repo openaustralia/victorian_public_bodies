@@ -21,5 +21,4 @@ record = {
   website:        table.search(:a)[1].attr(:href)
 }
 
-# ScraperWiki.save_sqlite([:id], record)
-p record
+ScraperWiki.save_sqlite([:id], record)
